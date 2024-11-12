@@ -1,0 +1,28 @@
+
+START 100                  
+LOAD A          
+ADD B          
+STORE RESULT         
+HLT                 
+NUM1 DC 5          
+NUM2 DC 10         
+RESULT DS 1
+END                 
+
+
+START 100
+READ A
+LABEL MOVER A,B
+LTORG
+='5'
+='1'
+='6'
+='7'
+MOVEM A,B
+LTORG
+='2'
+LOOP READ B
+A DS 1
+B DC '1'
+='1'
+END

@@ -1,0 +1,32 @@
+from tkinter import *
+
+def validateLogin():
+    # Print username and password to console
+    print("Username:", username.get())
+    print("Password:", password.get())
+    # Display success message on the label
+    message.config(text="Login Successfully", fg="green")
+
+# Initialize window
+window = Tk()
+window.geometry('250x200')  # Increased height to accommodate the message
+window.title('Login')
+
+# Username and Password input fields
+Label(window, text="Username").pack()
+username = Entry(window)
+username.pack()
+
+Label(window, text="Password").pack()
+password = Entry(window, show='*')
+password.pack()
+
+# Message Label for displaying login status
+message = Label(window, text="", fg="red")  # Default message color is red
+message.pack(pady=10)
+
+# Buttons
+Button(window, text="Login", command=validateLogin).pack(pady=5)
+
+# Run the Tkinter event loop
+window.mainloop()

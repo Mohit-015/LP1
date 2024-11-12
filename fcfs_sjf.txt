@@ -1,0 +1,118 @@
+import java.util.Scanner;
+
+public class SchedulingAlgorithms {
+
+    public static void main(String[] args) {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Scheduling Algorithm Menu");
+        System.out.println("1. First Come First Serve (FCFS)");
+        System.out.println("2. Shortest Job First (SJF)");
+        System.out.print("Choose an algorithm (1 or 2): ");
+        int choice = s.nextInt();
+
+        if (choice == 1) {
+            fcfs(s);
+        } else if (choice == 2) {
+            sjf(s);
+        } else {
+            System.out.println("Invalid choice. Please select 1 or 2.");
+        }
+        
+        s.close();
+    }
+
+    // FCFS Scheduling Algorithm
+    public static void fcfs(Scanner s) {
+        System.out.println("\nFirst Come First Serve Algorithm");
+        System.out.print("Enter Number of Processes: ");
+        int n = s.nextInt();
+        int[] Process = new int[n];
+        int[] Arrival = new int[n];
+        int[] Burst = new int[n];
+        int[] Waiting = new int[n];
+        int[] Completion = new int[n];
+        int[] TurnAround = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            Process[i] = i + 1;
+            System.out.print("Enter Arrival Time for Process " + (i + 1) + ": ");
+            Arrival[i] = s.nextInt();
+            System.out.print("Enter Burst Time: ");
+            Burst[i] = s.nextInt();
+        }
+
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("Process | Arrival | Burst | Completion | Turnaround | Waiting");
+        System.out.println("---------------------------------------------------------------------");
+
+        for (int i = 0; i < n; i++) {
+            if (i == 0) Completion[0] = Burst[0] + Arrival[0];
+            else Completion[i] = Math.max(Completion[i - 1], Arrival[i]) + Burst[i];
+            
+            TurnAround[i] = Completion[i] - Arrival[i];
+            Waiting[i] = TurnAround[i] - Burst[i];
+
+            System.out.println(Process[i] + "\t  " + Arrival[i] + "\t " + Burst[i] + "\t\t" + Completion[i] + "\t\t" + TurnAround[i] + "\t" + Waiting[i]);
+        }
+    }
+
+    // SJF Scheduling Algorithm
+    public static void sjf(Scanner s) {
+        System.out.println("\nShortest Job First Algorithm");
+        System.out.print("Enter Number of Processes: ");
+        int n = s.nextInt();
+        int[] Process = new int[n];
+        int[] Arrival = new int[n];
+        int[] Burst = new int[n];
+        int[] Waiting = new int[n];
+        int[] Completion = new int[n];
+        int[] TurnAround = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            Process[i] = i + 1;
+            System.out.print("Enter Arrival Time for Process " + (i + 1) + ": ");
+            Arrival[i] = s.nextInt();
+            System.out.print("Enter Burst Time: ");
+            Burst[i] = s.nextInt();
+        }
+
+        // Sorting processes based on Burst time for SJF
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (Burst[i] > Burst[j]) {
+                    int tempBurst = Burst[i];
+                    Burst[i] = Burst[j];
+                    Burst[j] = tempBurst;
+                    int tempP = Process[i];
+                    Process[i] = Process[j];
+                    Process[j] = tempP;
+                    int tempAT = Arrival[i];
+                    Arrival[i] = Arrival[j];
+                    Arrival[j] = tempAT;
+                }
+            }
+        }
+
+        int WT_avg = 0, TAT_avg = 0;
+        System.out.println("---------------------------------------------------------------------");
+        System.out.println("Process | Arrival | Burst | Completion | Turnaround | Waiting");
+        System.out.println("---------------------------------------------------------------------");
+
+        for (int i = 0; i < n; i++) {
+            if (i == 0) Completion[0] = Burst[0] + Arrival[0];
+            else Completion[i] = Math.max(Completion[i - 1], Arrival[i]) + Burst[i];
+            
+            TurnAround[i] = Completion[i] - Arrival[i];
+            Waiting[i] = TurnAround[i] - Burst[i];
+
+            System.out.println(Process[i] + "\t  " + Arrival[i] + "\t " + Burst[i] + "\t\t" + Completion[i] + "\t\t" + TurnAround[i] + "\t" + Waiting[i]);
+            
+            WT_avg += Waiting[i];
+            TAT_avg += TurnAround[i];
+        }
+
+        System.out.println("Stats:");
+        System.out.println("Average Waiting Time: " + (double) WT_avg / n);
+        System.out.println("Average Turnaround Time: " + (double) TAT_avg / n);
+    }
+}
